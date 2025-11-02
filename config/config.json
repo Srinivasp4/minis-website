@@ -1,3 +1,11 @@
 {
-  "host": "www.makeitonline.in"
+  "host": "www.makeitonline.in",
+  "OTP_URL": "${ENV_BASE_URL}api/v1/otp/",
+  "ACCOUNT_URL": "{ENV_BASE_URL}api/v1/account/",
+  "LISTING_URL": "{ENV_BASE_URL}api/v1/listing/",
+  "CATELOG_URL": "{ENV_BASE_URL}api/v1/catelog/",
+  "ORDER_URL": "${ENV_BASE_URL}api/v1/order/",
+  "STORAGE_URL": "${ENV_BASE_URL}api/v1/storage/",
+  "SEARCH_URL": "${ENV_BASE_URL}api/v1/search/",
+  "SECURITY_URL": "${ENV_BASE_URL}api/v1/security/"
 }
