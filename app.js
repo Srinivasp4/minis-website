@@ -1,61 +1,54 @@
-var nextBtn = document.querySelector('.next'),
-    prevBtn = document.querySelector('.prev'),
-    carousel = document.querySelector('.carousel'),
-    list = document.querySelector('.list'), 
-    item = document.querySelectorAll('.item'),
-    runningTime = document.querySelector('.carousel .timeRunning') 
-
-let timeRunning = 3000 
-let timeAutoNext = 7000
-
-nextBtn.onclick = function(){
-    showSlider('next')
+let next = document.getElementById('next');
+let prev = document.getElementById('prev');
+let carousel = document.querySelector('.carousel');
+let items = document.querySelectorAll('.carousel .item');
+let countItem = items.length;
+let active = 1;
+let other_1 = null;
+let other_2 = null;
+next.onclick = () => {
+    carousel.classList.remove('prev');
+    carousel.classList.add('next');
+    active =active + 1 >= countItem ? 0 : active + 1;
+    other_1 =active - 1 < 0 ? countItem -1 : active - 1;
+    other_2 = active + 1 >= countItem ? 0 : active + 1;
+    changeSlider();
 }
-
-prevBtn.onclick = function(){
-    showSlider('prev')
+prev.onclick = () => {
+    carousel.classList.remove('next');
+    carousel.classList.add('prev');
+    active = active - 1 < 0 ? countItem - 1 : active - 1;
+    other_1 = active + 1 >= countItem ? 0 : active + 1;
+    other_2 = other_1 + 1 >= countItem ? 0 : other_1 + 1;
+    changeSlider();
 }
+const changeSlider = () => {
+    let itemOldActive = document.querySelector('.carousel .item.active');
+    if(itemOldActive) itemOldActive.classList.remove('active');
 
-let runTimeOut 
+    let itemOldOther_1 = document.querySelector('.carousel .item.other_1');
+    if(itemOldOther_1) itemOldOther_1.classList.remove('other_1');
 
-let runNextAuto = setTimeout(() => {
-    nextBtn.click()
-}, timeAutoNext)
+    let itemOldOther_2 = document.querySelector('.carousel .item.other_2');
+    if(itemOldOther_2) itemOldOther_2.classList.remove('other_2');
 
+    items.forEach(e => {
+        e.querySelector('.image img').style.animation = 'none';
+        e.querySelector('.image figcaption').style.animation = 'none';
+        void e.offsetWidth;
+        e.querySelector('.image img').style.animation = '';
+        e.querySelector('.image figcaption').style.animation = '';
+    })
 
-function resetTimeAnimation() {
-    runningTime.style.animation = 'none'
-    runningTime.offsetHeight /* trigger reflow */
-    runningTime.style.animation = null 
-    runningTime.style.animation = 'runningTime 7s linear 1 forwards'
+    items[active].classList.add('active');
+    items[other_1].classList.add('other_1');
+    items[other_2].classList.add('other_2');
+
+    clearInterval(autoPlay);
+    autoPlay = setInterval(() => {
+        next.click();
+    }, 5000);
 }
-
-
-function showSlider(type) {
-    let sliderItemsDom = list.querySelectorAll('.carousel .list .item')
-    if(type === 'next'){
-        list.appendChild(sliderItemsDom[0])
-        carousel.classList.add('next')
-    } else{
-        list.prepend(sliderItemsDom[sliderItemsDom.length - 1])
-        carousel.classList.add('prev')
-    }
-
-    clearTimeout(runTimeOut)
-
-    runTimeOut = setTimeout( () => {
-        carousel.classList.remove('next')
-        carousel.classList.remove('prev')
-    }, timeRunning)
-
-
-    clearTimeout(runNextAuto)
-    runNextAuto = setTimeout(() => {
-        nextBtn.click()
-    }, timeAutoNext)
-
-    resetTimeAnimation() // Reset the running time animation
-}
-
-// Start the initial animation 
-resetTimeAnimation()
+let autoPlay = setInterval(() => {
+    next.click();
+}, 5000);
