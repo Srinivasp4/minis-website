@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.letmakeitonline.admin.store",
+      "sha256_cert_fingerprints": [
+        "1A:4C:07:5A:ED:28:2A:CB:FA:C5:20:33:CC:8C:13:9D:71:8E:DB:37:49:81:23:C5:AE:3A:73:1E:DF:86:62:14"
+      ]
+    }
+  }
+]
