@@ -1,112 +1,858 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    
-    <header>
-        <figure class="logo">
-            <img src="images/logo.png" alt="">
-        </figure>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="">Menu</a></li>
-                <li><a href="privacy.html">Privacy</a></li>
-            </ul>
-        </nav>
-    </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minis Landing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      const demoBtn = document.getElementById("bookDemo");
+const onboardBtn = document.getElementById("startOnboarding");
 
-    <main>
-        <section class="carousel next">
-            <div class="list">
-                <article class="item other_1">
-                    <div class="main-content" 
-                    style="background-color: #9c4d2f;">
-                        <div class="content">
-                            <h2>Mini (s)tore dashboard</h2>
-                            <p class="price"></p>
-                            <p class="description">
-                                Mini's landing page, where as categories, subcategories, groups and products. It allows to capture location of the customer. It allows to search products.
-                            </p>
-                            <!-- <button class="addToCard">
-                                Add To Card
-                            </button> -->
-                        </div>
-                    </div>
-                    <figure class="image">
-                        <img src="images/1.png" alt="">
-                        <figcaption>Mini (s)tore dashboard</figcaption>
-                    </figure>
-                </article>
-                <article class="item active">
-                    <div class="main-content" 
-                    style="background-color: #f5bfaf;">
-                        <div class="content">
-                            <h2>Group of products</h2>
-                            <p class="price"></p>
-                            <p class="description">
-                                Group products - It shows group of products.
-                            </p>
-                            <!-- <button class="addToCard">
-                                Add To Card
-                            </button> -->
-                        </div>
-                    </div>
-                    <figure class="image">
-                        <img src="images/2.png" alt="">
-                        <figcaption>Group of products</figcaption>
-                    </figure>
-                </article>
-                <article class="item other_2">
-                    <div class="main-content" 
-                    style="background-color: #dedfe1;">
-                        <div class="content">
-                            <h2>Group of products</h2>
-                            <p class="price"></p>
-                            <p class="description">
-                                Group products - It shows group of products.
-                            </p>
-                            <!-- <!-- <button class="addToCard">
-                                Add To Card
-                            </button> -->
-                        </div>
-                    </div>
-                    <figure class="image">
-                        <img src="images/3.png" alt="">
-                        <figcaption>Group of products</figcaption>
-                    </figure>
-                </article>
-                <article class="item">
-                    <div class="main-content" 
-                    style="background-color: #7eb63d;">
-                        <div class="content">
-                            <h2>Matcha latte macchiato, a new product</h2>
-                            <p class="price"></p>
-                            <p class="description">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores labore animi voluptatibus sequi illo, earum molestias explicabo officiis iste neque? Quis quod eligendi fugit, dolore nam itaque modi exercitationem voluptatem corrupti aut aspernatur. Quos non in sed ratione tenetur harum.
-                            </p>
-                            <!-- <button class="addToCard">
-                                Add To Card
-                            </button> -->
-                        </div>
-                    </div>
-                    <figure class="image">
-                        <img src="images/4.png" alt="">
-                        <figcaption>Matcha latte macchiato, a new product</figcaption>
-                    </figure>
-                </article>
-            </div>
-            <div class="arrows">
-                <button id="prev"><</button>
-                <button id="next">></button>
-            </div>
+function openLink(type) {
+  const routes = {
+    demo: "https://example.com/book-demo",
+    onboarding: "https://example.com/start-onboarding",
+  };
+  window.open(routes[type], "_blank");
+}
+
+demoBtn?.addEventListener("click", () => openLink("demo"));
+onboardBtn?.addEventListener("click", () => openLink("onboarding"));
+
+    </script>
+    <style>
+      :root {
+  --page-scale: 0.5;
+  --bg: #f7f0ff;
+  --ink: #231a47;
+  --muted: #655f82;
+  --card: #ffffff;
+  --coral: #ff78b2;
+  --premium-gold: #7f6dff;
+  --premium-deep: #3f35a5;
+  --premium-sky: #53b9ff;
+  --illustration-bg: #f1ebff;
+  --illustration-screen: #f8f6ff;
+  --illustration-ink: #2e2378;
+  --illustration-stroke: #3e34a0;
+  --illustration-stroke-soft: #5a4dba;
+  --illustration-accent: #ff8dc0;
+  --illustration-accent-strong: #7a6dff;
+  --illustration-badge-bg: #fff5fd;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at 20% -10%, #efe6ff, var(--bg) 44%);
+  overflow-x: hidden;
+}
+
+.page-shell {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 24px 30px 64px;
+  transform: scale(var(--page-scale));
+  transform-origin: top center;
+  width: calc(100% / var(--page-scale));
+}
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 46px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--premium-deep);
+}
+
+.brand-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 6px 14px rgba(63, 53, 165, 0.22);
+}
+
+.logo-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(
+    130deg,
+    var(--premium-deep) 48%,
+    #fff 48%,
+    #fff 62%,
+    var(--premium-sky) 62%
+  );
+  border: 2px solid var(--premium-deep);
+}
+
+.brand-text {
+  line-height: 1;
+}
+
+.logo .logo-mark {
+  display: none;
+}
+
+.logo .brand-text {
+  display: inline-flex;
+}
+
+.logo.logo-fallback .brand-image {
+  display: none;
+}
+
+.logo.logo-fallback .logo-mark,
+.logo.logo-fallback .brand-text {
+  display: inline-flex;
+}
+
+nav {
+  display: flex;
+  gap: 54px;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 12px;
+}
+
+button {
+  font-family: inherit;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  min-width: 112px;
+  padding: 13px 30px;
+  border: 2px solid #8a8a8a;
+  background: transparent;
+  font-weight: 700;
+}
+
+.btn-dark {
+  min-width: 220px;
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #2a2366, var(--premium-deep));
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 10px 22px rgba(63, 53, 165, 0.26);
+}
+
+.btn-coral {
+  min-width: 260px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #ff9bc8, var(--coral));
+  color: #2e1230;
+  font-weight: 800;
+  box-shadow: 0 10px 22px rgba(255, 120, 178, 0.28);
+}
+
+.hero {
+  text-align: center;
+  margin-top: 80px;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(58px, 6.2vw, 116px);
+  line-height: 0.95;
+  font-weight: 800;
+  color: #342c8d;
+}
+
+.hero p {
+  max-width: 970px;
+  margin: 30px auto 0;
+  font-size: clamp(24px, 2.4vw, 48px);
+  line-height: 1.22;
+  font-weight: 500;
+  color: #222;
+}
+
+.cta-row {
+  margin-top: 38px;
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+}
+
+.cta {
+  padding: 22px 42px;
+  font-size: 28px;
+}
+
+.btn-play {
+  min-width: 170px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 2px solid var(--premium-gold);
+  color: #2a2366;
+  background: linear-gradient(135deg, #f0e9ff, #e5dcff);
+  font-size: 20px;
+  font-weight: 800;
+  padding: 14px 28px;
+}
+
+.hero-microcopy {
+  margin: 14px auto 0;
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #4e5764;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(26, 35, 50, 0.16);
+  background: rgba(255, 255, 255, 0.66);
+}
+
+.hero-microcopy a {
+  color: #2b2370;
+  font-weight: 800;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f3eaff, #e7ddff);
+  border: 1px solid rgba(127, 109, 255, 0.55);
+}
+
+.feature-showcase {
+  margin-top: 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  align-items: center;
+}
+
+.device-column {
+  position: relative;
+  min-height: 820px;
+}
+
+.device-illustration {
+  width: 100%;
+  max-width: 760px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.mobile-illustration {
+  display: none;
+}
+
+.phone {
+  width: 470px;
+  height: 790px;
+  border-radius: 62px;
+  border: 10px solid #0f0f0f;
+  background: #f4f4f4;
+  margin: 0 auto;
+  position: relative;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.16);
+}
+
+.phone-notch {
+  width: 156px;
+  height: 36px;
+  background: #101010;
+  border-radius: 999px;
+  margin: 14px auto 0;
+}
+
+.screen-glow {
+  position: absolute;
+  inset: 78px 16px 16px;
+  border-radius: 46px;
+  background: #f7f7f7;
+}
+
+.floating-card {
+  position: absolute;
+  background: var(--card);
+  border: 2px solid #2f2f2f;
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.floating-card h4 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.floating-card p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.store-card {
+  left: 28px;
+  top: 118px;
+  width: 226px;
+  height: 252px;
+}
+
+.status-card {
+  right: 18px;
+  top: 148px;
+  width: 298px;
+}
+
+.contact-card {
+  left: -4px;
+  bottom: 144px;
+  width: 228px;
+}
+
+.offer-card {
+  left: 126px;
+  bottom: 262px;
+  width: 372px;
+  background: #f49781;
+}
+
+.sales-card {
+  right: 24px;
+  bottom: 116px;
+  width: 284px;
+}
+
+.bar-row {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  padding: 2px 2px 0;
+  border-top: 1px solid #ececec;
+}
+
+.bar-row span {
+  width: 16px;
+  background: #ef8d73;
+  border-radius: 4px 4px 0 0;
+}
+
+.bar-row span:nth-child(1) {
+  height: 18px;
+}
+.bar-row span:nth-child(2) {
+  height: 30px;
+}
+.bar-row span:nth-child(3) {
+  height: 42px;
+}
+.bar-row span:nth-child(4) {
+  height: 58px;
+}
+.bar-row span:nth-child(5) {
+  height: 44px;
+}
+.bar-row span:nth-child(6) {
+  height: 52px;
+}
+
+.bar-labels {
+  margin-top: 8px;
+  font-size: 9px;
+  color: #555;
+  letter-spacing: 0.1px;
+}
+
+.awning {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  border-radius: 10px 10px 16px 16px;
+  overflow: hidden;
+  border: 1.5px solid #2f2f2f;
+}
+
+.awning span {
+  height: 50px;
+}
+
+.awning span:nth-child(odd) {
+  background: #f59a82;
+}
+
+.awning span:nth-child(even) {
+  background: #fff;
+}
+
+.store-windows {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.store-windows span {
+  display: block;
+  height: 62px;
+  border: 1.5px solid #666;
+  border-radius: 8px;
+  background: #efefef;
+}
+
+.store-lines {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.store-lines span {
+  display: block;
+  height: 6px;
+  border-radius: 8px;
+  background: #e4e4e4;
+}
+
+.status-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.status-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.status-list li b {
+  margin-left: auto;
+  font-weight: 600;
+  color: #555;
+  font-size: 13px;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid #4b4b4b;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.done {
+  background: #f8a087;
+}
+
+.prog {
+  background: #f8a087;
+}
+
+.wait {
+  background: #fff;
+}
+
+.contact-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.contact-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.contact-list i {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #ffe3d8, #e8e8e8);
+  border: 1px solid #ccc;
+}
+
+.contact-list span {
+  display: block;
+  height: 8px;
+  border-radius: 6px;
+  background: #d9d9d9;
+  flex: 1;
+}
+
+.offer-row {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.offer-row button {
+  padding: 9px 16px;
+  background: #111;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.offer-badge {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  border: 2px solid #313131;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 0.95;
+  background: #fff5ee;
+  text-align: center;
+}
+
+.benefits-column h2 {
+  margin: 0 0 22px;
+  font-size: clamp(52px, 4.7vw, 96px);
+  line-height: 0.98;
+}
+
+.benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.benefit-item {
+  background: #fff;
+  border: 1.5px solid #dfdfdf;
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 8px 18px rgba(26, 35, 50, 0.06);
+}
+
+.icon-box {
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: #f3f0ef;
+  font-size: 36px;
+  color: var(--coral);
+}
+
+.benefit-item h3 {
+  margin: 14px 0 6px;
+  font-size: 28px;
+}
+
+.benefit-item p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.25;
+  color: #333;
+}
+
+@media (max-width: 1100px) {
+  :root {
+    --page-scale: 1;
+  }
+
+  .page-shell {
+    width: 100%;
+    transform: none;
+    padding: 16px 14px 28px;
+  }
+
+  .top-nav,
+  nav,
+  .nav-actions,
+  .cta-row {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .feature-showcase {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-top: 36px;
+  }
+
+  .benefit-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .device-column {
+    min-height: auto;
+  }
+
+  .desktop-illustration {
+    display: none;
+  }
+
+  .mobile-illustration {
+    display: block;
+    max-width: 100%;
+  }
+
+  .hero {
+    margin-top: 30px;
+  }
+
+  .hero h1 {
+    font-size: clamp(34px, 9vw, 54px);
+    line-height: 1;
+  }
+
+  .hero p {
+    font-size: clamp(16px, 4.8vw, 24px);
+    margin-top: 16px;
+  }
+
+  .cta-row {
+    margin-top: 18px;
+    gap: 10px;
+  }
+
+  .btn-play {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+
+  .cta {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+
+  .hero-microcopy {
+    font-size: 13px;
+    margin-top: 10px;
+    padding: 7px 10px;
+    gap: 8px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .benefits-column h2 {
+    font-size: clamp(34px, 9vw, 54px);
+    margin-bottom: 12px;
+  }
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="top-nav">
+        <div class="logo">
+          <img
+            class="brand-image"
+            src="https://play-lh.googleusercontent.com/Vvoz_l0g4hphliX9XaUxjBiKkDsEkxCVh5_yfDzniGOLUYzVGeUsUT7NYCd5W7cJ5xs=w480-h960-rw"
+            alt="Minis logo"
+            onerror="this.style.display='none'; this.parentElement.classList.add('logo-fallback')"
+          />
+          <span class="logo-mark"></span>
+          <span class="brand-text">Minis</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <h1>Grow Your Local Store Online, Faster</h1>
+          <p>
+            Everything you need to manage catalog, orders, customers, offers,
+            and reporting.
+          </p>
+          <div class="cta-row">
+            <button class="btn-dark cta" id="bookDemo">BOOK FREE DEMO</button>
+            <button class="btn-coral cta" id="startOnboarding">
+              START FREE ONBOARDING
+            </button>
+            <a
+              class="btn-play"
+              href="https://play.google.com/store/apps/details?id=com.letmakeitonline.admin.store"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GET APP</a
+            >
+          </div>
         </section>
-    </main>
 
-    <script src="app.js"></script>
-</body>
+        <section class="feature-showcase">
+          <div class="device-column">
+            <svg
+              class="device-illustration desktop-illustration"
+              viewBox="0 0 760 840"
+              role="img"
+              aria-label="Phone with storefront and commerce widgets"
+            >
+              <rect width="760" height="840" fill="var(--illustration-bg)"></rect>
+
+              <rect x="230" y="72" width="300" height="660" rx="56" fill="var(--illustration-ink)"></rect>
+              <rect x="242" y="84" width="276" height="636" rx="48" fill="var(--illustration-screen)"></rect>
+              <rect x="325" y="104" width="110" height="30" rx="15" fill="var(--illustration-ink)"></rect>
+
+              <rect x="120" y="160" width="210" height="210" rx="18" fill="#fff" stroke="var(--illustration-stroke)" stroke-width="2"></rect>
+              <rect x="146" y="188" width="158" height="44" rx="10" fill="#fff" stroke="var(--illustration-stroke-soft)" stroke-width="1.5"></rect>
+              <rect x="146" y="188" width="32" height="44" fill="var(--illustration-accent)"></rect>
+              <rect x="210" y="188" width="32" height="44" fill="var(--illustration-accent)"></rect>
+              <rect x="274" y="188" width="30" height="44" fill="var(--illustration-accent)"></rect>
+              <rect x="150" y="256" width="44" height="58" rx="6" fill="#f3f3f3" stroke="#666"></rect>
+              <rect x="204" y="256" width="44" height="58" rx="6" fill="#f3f3f3" stroke="#666"></rect>
+              <rect x="258" y="256" width="44" height="58" rx="6" fill="#f3f3f3" stroke="#666"></rect>
+
+              <rect x="448" y="192" width="250" height="170" rx="18" fill="#fff" stroke="var(--illustration-stroke)" stroke-width="2"></rect>
+              <text x="468" y="236" font-size="16" font-weight="700" fill="var(--illustration-ink)">Order status tracker</text>
+              <circle cx="480" cy="270" r="10" fill="var(--illustration-accent)" stroke="var(--illustration-stroke-soft)" stroke-width="1.5"></circle>
+              <circle cx="480" cy="308" r="10" fill="var(--illustration-accent)" stroke="var(--illustration-stroke-soft)" stroke-width="1.5"></circle>
+              <circle cx="480" cy="346" r="10" fill="#fff" stroke="var(--illustration-stroke-soft)" stroke-width="1.5"></circle>
+              <text x="500" y="275" font-size="15" fill="#222">Delived</text>
+              <text x="500" y="313" font-size="15" fill="#222">Promoted</text>
+              <text x="500" y="351" font-size="15" fill="#222">Renerted</text>
+              <text x="628" y="275" font-size="13" fill="#555">19 Jur 2</text>
+              <text x="628" y="313" font-size="13" fill="#555">23 Jun 3</text>
+              <text x="628" y="351" font-size="13" fill="#555">28 Apr 3</text>
+
+              <rect x="84" y="418" width="215" height="220" rx="18" fill="#fff" stroke="var(--illustration-stroke)" stroke-width="2"></rect>
+              <text x="106" y="453" font-size="16" font-weight="700" fill="#222">Customer contact</text>
+              <circle cx="126" cy="490" r="11" fill="#f0d3c8"></circle>
+              <circle cx="126" cy="528" r="11" fill="#efd7c8"></circle>
+              <circle cx="126" cy="566" r="11" fill="#e4d1bc"></circle>
+              <circle cx="126" cy="604" r="11" fill="#c8dae4"></circle>
+              <rect x="148" y="484" width="108" height="8" rx="4" fill="#d8d8d8"></rect>
+              <rect x="148" y="522" width="108" height="8" rx="4" fill="#d8d8d8"></rect>
+              <rect x="148" y="560" width="108" height="8" rx="4" fill="#d8d8d8"></rect>
+              <rect x="148" y="598" width="108" height="8" rx="4" fill="#d8d8d8"></rect>
+
+              <rect x="268" y="390" width="340" height="142" rx="18" fill="var(--illustration-accent)" stroke="var(--illustration-stroke)" stroke-width="2"></rect>
+              <text x="292" y="428" font-size="17" font-weight="700" fill="var(--illustration-ink)">Promotion::banner</text>
+              <text x="292" y="452" font-size="14" fill="#222">Get activative banner with</text>
+              <text x="292" y="472" font-size="14" fill="#222">15% OFF for einonts.</text>
+              <rect x="292" y="484" width="88" height="28" rx="14" fill="var(--illustration-ink)"></rect>
+              <text x="312" y="503" font-size="13" fill="#fff">Offer now</text>
+              <circle cx="536" cy="460" r="42" fill="var(--illustration-badge-bg)" stroke="var(--illustration-stroke)" stroke-width="2"></circle>
+              <text x="512" y="454" font-size="22" font-weight="800" fill="var(--illustration-ink)">15%</text>
+              <text x="523" y="478" font-size="22" font-weight="800" fill="var(--illustration-ink)">OFF</text>
+
+              <rect x="448" y="508" width="250" height="176" rx="18" fill="#fff" stroke="var(--illustration-stroke)" stroke-width="2"></rect>
+              <text x="468" y="542" font-size="17" font-weight="700" fill="var(--illustration-ink)">Weekly sales</text>
+              <rect x="492" y="608" width="16" height="30" rx="3" fill="var(--illustration-accent-strong)"></rect>
+              <rect x="516" y="592" width="16" height="46" rx="3" fill="var(--illustration-accent-strong)"></rect>
+              <rect x="540" y="574" width="16" height="64" rx="3" fill="var(--illustration-accent-strong)"></rect>
+              <rect x="564" y="548" width="16" height="90" rx="3" fill="var(--illustration-accent-strong)"></rect>
+              <rect x="588" y="584" width="16" height="54" rx="3" fill="var(--illustration-accent-strong)"></rect>
+              <rect x="612" y="558" width="16" height="80" rx="3" fill="var(--illustration-accent-strong)"></rect>
+              <rect x="636" y="532" width="16" height="106" rx="3" fill="var(--illustration-accent-strong)"></rect>
+            </svg>
+
+            <svg
+              class="device-illustration mobile-illustration"
+              viewBox="0 0 520 680"
+              role="img"
+              aria-label="Phone with commerce widgets mobile"
+            >
+              <rect width="520" height="680" fill="#f3f3f3"></rect>
+              <rect x="130" y="36" width="260" height="560" rx="48" fill="#111"></rect>
+              <rect x="140" y="46" width="240" height="540" rx="40" fill="#f6f6f6"></rect>
+              <rect x="205" y="60" width="108" height="24" rx="12" fill="#111"></rect>
+
+              <rect x="24" y="120" width="180" height="170" rx="16" fill="#fff" stroke="#343434" stroke-width="2"></rect>
+              <text x="40" y="150" font-size="15" font-weight="700" fill="#222">Storefront</text>
+              <rect x="42" y="166" width="140" height="18" rx="9" fill="#f59b84"></rect>
+              <rect x="42" y="196" width="42" height="52" rx="6" fill="#f3f3f3" stroke="#666"></rect>
+              <rect x="94" y="196" width="42" height="52" rx="6" fill="#f3f3f3" stroke="#666"></rect>
+              <rect x="146" y="196" width="36" height="52" rx="6" fill="#f3f3f3" stroke="#666"></rect>
+
+              <rect x="296" y="148" width="200" height="170" rx="16" fill="#fff" stroke="#343434" stroke-width="2"></rect>
+              <text x="312" y="178" font-size="15" font-weight="700" fill="#222">Order status</text>
+              <circle cx="322" cy="206" r="8" fill="#f59b84" stroke="#444"></circle>
+              <circle cx="322" cy="236" r="8" fill="#f59b84" stroke="#444"></circle>
+              <circle cx="322" cy="266" r="8" fill="#fff" stroke="#444"></circle>
+              <text x="338" y="210" font-size="13" fill="#222">Delivered</text>
+              <text x="338" y="240" font-size="13" fill="#222">Promoted</text>
+              <text x="338" y="270" font-size="13" fill="#222">Returned</text>
+
+              <rect x="130" y="392" width="260" height="158" rx="16" fill="#fff" stroke="#343434" stroke-width="2"></rect>
+              <text x="150" y="422" font-size="16" font-weight="700" fill="#111">Weekly sales</text>
+              <rect x="176" y="500" width="14" height="22" rx="3" fill="#ef8d73"></rect>
+              <rect x="198" y="484" width="14" height="38" rx="3" fill="#ef8d73"></rect>
+              <rect x="220" y="466" width="14" height="56" rx="3" fill="#ef8d73"></rect>
+              <rect x="242" y="444" width="14" height="78" rx="3" fill="#ef8d73"></rect>
+              <rect x="264" y="474" width="14" height="48" rx="3" fill="#ef8d73"></rect>
+              <rect x="286" y="454" width="14" height="68" rx="3" fill="#ef8d73"></rect>
+              <rect x="308" y="432" width="14" height="90" rx="3" fill="#ef8d73"></rect>
+            </svg>
+          </div>
+
+          <div class="benefits-column">
+            <h2>Built for Local Ecommerce</h2>
+            <div class="benefit-grid">
+              <article class="benefit-item">
+                <div class="icon-box">⚙</div>
+                <h3>Simple</h3>
+                <p>Easy setup and clean design</p>
+              </article>
+              <article class="benefit-item">
+                <div class="icon-box">🛒</div>
+                <h3>Practical</h3>
+                <p>Streamlined features for your store</p>
+              </article>
+              <article class="benefit-item">
+                <div class="icon-box">📈</div>
+                <h3>Scalable</h3>
+                <p>Grow from first sale to many sales</p>
+              </article>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
 </html>
