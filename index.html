@@ -1,4 +1,4 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -12,7 +12,7 @@
     />
     <style>
 :root {
-  --page-scale: 0.5;
+  --page-scale: 0.6;
   --bg: #f7f0ff;
   --ink: #231a47;
   --muted: #655f82;
@@ -609,11 +609,42 @@ button:hover {
 }
 
 .plan-card {
+  --plan-accent: #7a6dff;
+  --plan-accent-soft: #efe9ff;
+  --plan-accent-border: #c7bbff;
   background: linear-gradient(145deg, #ffffff, #f4f1ff);
-  border: 1px solid #d7d2ff;
+  border: 1px solid var(--plan-accent-border);
   border-radius: 28px;
   padding: 34px;
   box-shadow: 0 12px 30px rgba(35, 26, 71, 0.08);
+}
+
+.plan-card.bronze {
+  --plan-accent: #7a6dff;
+  --plan-accent-soft: #efe9ff;
+  --plan-accent-border: #c7bbff;
+  background: linear-gradient(145deg, #ffffff, #f4f1ff);
+}
+
+.plan-card.silver {
+  --plan-accent: #7a6dff;
+  --plan-accent-soft: #efe9ff;
+  --plan-accent-border: #c7bbff;
+  background: linear-gradient(145deg, #ffffff, #f4f1ff);
+}
+
+.plan-card.gold {
+  --plan-accent: #7a6dff;
+  --plan-accent-soft: #efe9ff;
+  --plan-accent-border: #c7bbff;
+  background: linear-gradient(145deg, #ffffff, #f4f1ff);
+}
+
+.plan-card.platinum {
+  --plan-accent: #7a6dff;
+  --plan-accent-soft: #efe9ff;
+  --plan-accent-border: #c7bbff;
+  background: linear-gradient(145deg, #ffffff, #f4f1ff);
 }
 
 .plan-nav {
@@ -682,55 +713,101 @@ button:hover {
   padding: 10px 18px;
   font-size: 18px;
   font-weight: 800;
-  background: #efe9ff;
-  border: 1px solid #c7bbff;
-  color: #3a2d89;
+  background: var(--plan-accent-soft);
+  border: 1px solid var(--plan-accent-border);
+  color: var(--plan-accent);
   white-space: nowrap;
+}
+
+.plan-policy-banner {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--plan-accent-border);
+  background: linear-gradient(135deg, var(--plan-accent-soft), #ffffff);
+  color: #2f2a54;
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 700;
 }
 
 .plan-label {
   margin: 18px 0 10px;
   font-size: 19px;
   font-weight: 800;
-  color: #3a2d89;
+  color: var(--plan-accent);
   letter-spacing: 0.4px;
   text-transform: uppercase;
 }
 
 .plan-limits {
-  display: flex;
-  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 10px;
+  display: grid;
   gap: 8px;
+  border-radius: 14px;
+  border: 1px solid var(--plan-accent-border);
+  background: linear-gradient(180deg, #fff, var(--plan-accent-soft));
 }
 
 .plan-limit {
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid #d4d1e4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--plan-accent-border);
+  border-left: 4px solid var(--plan-accent-border);
   background: #fff;
-  font-size: 18px;
+}
+
+.plan-limit-label {
+  font-size: 17px;
   font-weight: 700;
-  color: #3a3752;
+  color: #4b4668;
+}
+
+.plan-limit-value {
+  min-width: 84px;
+  text-align: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--plan-accent-border);
+  background: var(--plan-accent-soft);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--plan-accent);
 }
 
 .plan-features {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 10px;
   display: grid;
-  gap: 6px;
+  gap: 8px;
+  border-radius: 14px;
+  border: 1px solid var(--plan-accent-border);
+  background: linear-gradient(180deg, #fff, var(--plan-accent-soft));
 }
 
 .plan-feature {
   display: flex;
   align-items: flex-start;
   gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
   font-size: 21px;
   color: #292745;
+  border: 1px solid var(--plan-accent-border);
+  background: linear-gradient(135deg, var(--plan-accent-soft), #fff);
 }
 
 .plan-feature.out {
   color: #8f8aa9;
+  border-color: #e7e4f2;
+  background: #fbfaff;
 }
 
 .plan-feature-mark {
@@ -745,8 +822,8 @@ button:hover {
 }
 
 .plan-feature.in .plan-feature-mark {
-  background: #daf6e4;
-  color: #117542;
+  background: #e9e3ff;
+  color: #4b3fc3;
 }
 
 .plan-feature.out .plan-feature-mark {
@@ -765,14 +842,14 @@ button:hover {
   justify-content: space-between;
   gap: 10px;
   border-radius: 16px;
-  border: 1px solid #dbd5ff;
+  border: 1px solid var(--plan-accent-border);
   background: #fff;
   padding: 14px 16px;
 }
 
 .plan-duration.main {
-  border-color: #a28cff;
-  background: linear-gradient(135deg, #f7f4ff, #f2edff);
+  border-color: var(--plan-accent-border);
+  background: linear-gradient(135deg, var(--plan-accent-soft), #ffffff);
 }
 
 .plan-duration-left {
@@ -795,13 +872,43 @@ button:hover {
 }
 
 .duration-pill.best {
-  color: #3a2d89;
-  background: #e6dcff;
+  color: var(--plan-accent);
+  background: var(--plan-accent-soft);
+  border: 1px solid var(--plan-accent-border);
 }
 
 .duration-pill.off {
-  color: #17603b;
-  background: #d8f7e4;
+  color: #4b3fc3;
+  background: #e9e3ff;
+  border: 1px solid #c7bbff;
+}
+
+.plan-footnote {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px dashed var(--plan-accent-border);
+  background: #fff;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #5c577b;
+}
+
+.tc-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  margin-right: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--plan-accent-border);
+  background: var(--plan-accent-soft);
+  color: var(--plan-accent);
+  font-weight: 800;
+}
+
+.tc-highlight {
+  color: #2f2a54;
+  font-weight: 700;
 }
 
 @media (max-width: 1100px) {
@@ -918,8 +1025,28 @@ button:hover {
     font-size: 14px;
   }
 
+  .plan-policy-banner {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
   .plan-feature {
     font-size: 13px;
+  }
+
+  .plan-limit {
+    padding: 6px 8px;
+    gap: 8px;
+  }
+
+  .plan-limit-label {
+    font-size: 13px;
+  }
+
+  .plan-limit-value {
+    min-width: 68px;
+    font-size: 12px;
+    padding: 2px 6px;
   }
 
   .plan-feature-mark {
@@ -1165,18 +1292,19 @@ button:hover {
             {
               label: "Support resolution SLA (within 24 - 48 hours)",
               included: true,
+              starred: true,
             },
           ],
           limits: [
             { label: "Orders / month", value: "300" },
-            { label: "Campaign sends / month", value: "200" },
-            { label: "Abandoned recovery / month", value: "0" },
+            { label: "Campaign sends / month", value: "200", starred: true },
+            { label: "Abandoned recovery / month", value: "0", starred: true },
           ],
         },
         {
           title: "Silver",
           subtitle: "Growth + Engagement",
-          monthlyPriceInr: 450,
+          monthlyPriceInr: 500,
           badge: "Popular",
           features: [
             { label: "Order notifications", included: true },
@@ -1190,18 +1318,19 @@ button:hover {
             {
               label: "Support resolution SLA (within 18 - 24 hours)",
               included: true,
+              starred: true,
             },
           ],
           limits: [
             { label: "Orders / month", value: "1,500" },
-            { label: "Campaign sends / month", value: "1,500" },
-            { label: "Abandoned recovery / month", value: "500" },
+            { label: "Campaign sends / month", value: "1,500", starred: true },
+            { label: "Abandoned recovery / month", value: "0", starred: true },
           ],
         },
         {
           title: "Gold",
           subtitle: "Brand + Marketing",
-          monthlyPriceInr: 600,
+          monthlyPriceInr: 1000,
           badge: "Best Value",
           features: [
             { label: "Order notifications", included: true },
@@ -1215,18 +1344,19 @@ button:hover {
             {
               label: "Support resolution SLA (within 12 - 24 hours)",
               included: true,
+              starred: true,
             },
           ],
           limits: [
             { label: "Orders / month", value: "5,000" },
-            { label: "Campaign sends / month", value: "8,000" },
-            { label: "Abandoned recovery / month", value: "3,000" },
+            { label: "Campaign sends / month", value: "8,000", starred: true },
+            { label: "Abandoned recovery / month", value: "0", starred: true },
           ],
         },
         {
           title: "Platinum",
           subtitle: "Governance + Moderation",
-          monthlyPriceInr: 750,
+          monthlyPriceInr: 2000,
           badge: "Advanced",
           features: [
             { label: "Order notifications", included: true },
@@ -1240,12 +1370,13 @@ button:hover {
             {
               label: "Priority support resolution SLA (within 12 - 24 hours)",
               included: true,
+              starred: true,
             },
           ],
           limits: [
             { label: "Orders / month", value: "20,000" },
-            { label: "Campaign sends / month", value: "40,000" },
-            { label: "Abandoned recovery / month", value: "15,000" },
+            { label: "Campaign sends / month", value: "40,000", starred: true },
+            { label: "Abandoned recovery / month", value: "15,000", starred: true },
           ],
         },
       ];
@@ -1297,7 +1428,7 @@ button:hover {
             const limits = plan.limits
               .map(
                 (limit) =>
-                  `<span class="plan-limit">${limit.label}: ${limit.value}</span>`
+                  `<li class="plan-limit"><span class="plan-limit-label">${limit.label}${limit.starred ? "*" : ""}</span><span class="plan-limit-value">${limit.value}${limit.starred ? "*" : ""}</span></li>`
               )
               .join("");
 
@@ -1308,14 +1439,14 @@ button:hover {
                 return `
                   <li class="plan-feature ${typeClass}">
                     <span class="plan-feature-mark">${mark}</span>
-                    <span>${feature.label}</span>
+                    <span>${feature.label}${feature.starred ? "*" : ""}</span>
                   </li>
                 `;
               })
               .join("");
 
             return `
-              <article class="plan-card">
+              <article class="plan-card ${plan.title.toLowerCase()}">
                 <div class="plan-top">
                   <div>
                     <h3 class="plan-title">${plan.title} Plan</h3>
@@ -1324,12 +1455,14 @@ button:hover {
                   </div>
                   <span class="plan-badge">${plan.badge}</span>
                 </div>
-                <h4 class="plan-label">Plan Limits</h4>
-                <div class="plan-limits">${limits}</div>
+                <p class="plan-policy-banner">No orders in a month? No subscription fee for that month, and your plan auto-extends by 1 month.</p>
                 <h4 class="plan-label">Features</h4>
                 <ul class="plan-features">${features}</ul>
+                <h4 class="plan-label">Plan Limits</h4>
+                <ul class="plan-limits">${limits}</ul>
                 <h4 class="plan-label">Duration Pricing</h4>
                 <div class="plan-duration-list">${durationRows}</div>
+                <p class="plan-footnote"><span class="tc-tag">* T&amp;C</span><span class="tc-highlight">Features, limits and pricing may change later.</span></p>
               </article>
             `;
           })
