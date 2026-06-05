@@ -1253,28 +1253,36 @@ button:hover {
     </div>
 
     <script>
+      // Optional hard override:
+      // window.MINIS_API_BASE_URL = "http://127.0.0.1:9999";
+      // Same source used by app AppConfig.load():
+      window.MINIS_APP_CONFIG_URL =
+        window.MINIS_APP_CONFIG_URL ||
+        "https://www.makeitonline.in/config/config.json?app=boutique.makeitonline.in";
+
       const demoBtn = document.getElementById("bookDemo");
       const onboardBtn = document.getElementById("startOnboarding");
       const onboardPlanGrid = document.getElementById("onboardPlanGrid");
 
-      function openLink(type) {
-        const routes = {
-          demo: "https://example.com/book-demo",
-          onboarding: "https://example.com/start-onboarding",
-        };
-        window.open(routes[type], "_blank");
-      }
+      const DEFAULT_API_BASE_URL = "http://127.0.0.1:9999";
+      const DEFAULT_APP_CONFIG_URL =
+        "https://www.makeitonline.in/config/config.json?app=boutique.makeitonline.in";
+      let cachedApiBaseUrlPromise = null;
 
-      demoBtn?.addEventListener("click", () => openLink("demo"));
-      onboardBtn?.addEventListener("click", () => openLink("onboarding"));
-
-      const planDurationSpecs = [
+      const PLAN_DURATION_SPECS = [
         { months: 3, discountPercent: 5 },
         { months: 6, discountPercent: 10 },
         { months: 12, discountPercent: 15 },
       ];
 
-      const onboardPlanSpecs = [
+      const PLAN_TIER_ORDER = {
+        BRONZE: 1,
+        SILVER: 2,
+        GOLD: 3,
+        PLATINUM: 4,
+      };
+
+      const PLAN_FALLBACK = [
         {
           title: "Bronze",
           subtitle: "Operations Starter",
@@ -1292,19 +1300,18 @@ button:hover {
             {
               label: "Support resolution SLA (within 24 - 48 hours)",
               included: true,
-              starred: true,
             },
           ],
           limits: [
             { label: "Orders / month", value: "300" },
-            { label: "Campaign sends / month", value: "200", starred: true },
-            { label: "Abandoned recovery / month", value: "0", starred: true },
+            { label: "Campaign sends / month", value: "200" },
+            { label: "Abandoned recovery / month", value: "0" },
           ],
         },
         {
           title: "Silver",
           subtitle: "Growth + Engagement",
-          monthlyPriceInr: 500,
+          monthlyPriceInr: 450,
           badge: "Popular",
           features: [
             { label: "Order notifications", included: true },
@@ -1318,19 +1325,18 @@ button:hover {
             {
               label: "Support resolution SLA (within 18 - 24 hours)",
               included: true,
-              starred: true,
             },
           ],
           limits: [
             { label: "Orders / month", value: "1,500" },
-            { label: "Campaign sends / month", value: "1,500", starred: true },
-            { label: "Abandoned recovery / month", value: "0", starred: true },
+            { label: "Campaign sends / month", value: "1,500" },
+            { label: "Abandoned recovery / month", value: "500" },
           ],
         },
         {
           title: "Gold",
           subtitle: "Brand + Marketing",
-          monthlyPriceInr: 1000,
+          monthlyPriceInr: 600,
           badge: "Best Value",
           features: [
             { label: "Order notifications", included: true },
@@ -1341,22 +1347,18 @@ button:hover {
             { label: "Comment moderation", included: false },
             { label: "Abandoned cart recovery", included: false },
             { label: "Manage customers", included: false },
-            {
-              label: "Support resolution SLA (within 12 - 24 hours)",
-              included: true,
-              starred: true,
-            },
+            { label: "Support resolution SLA (within 12 - 24 hours)", included: true },
           ],
           limits: [
             { label: "Orders / month", value: "5,000" },
-            { label: "Campaign sends / month", value: "8,000", starred: true },
-            { label: "Abandoned recovery / month", value: "0", starred: true },
+            { label: "Campaign sends / month", value: "8,000" },
+            { label: "Abandoned recovery / month", value: "3,000" },
           ],
         },
         {
           title: "Platinum",
           subtitle: "Governance + Moderation",
-          monthlyPriceInr: 2000,
+          monthlyPriceInr: 750,
           badge: "Advanced",
           features: [
             { label: "Order notifications", included: true },
@@ -1370,19 +1372,31 @@ button:hover {
             {
               label: "Priority support resolution SLA (within 12 - 24 hours)",
               included: true,
-              starred: true,
             },
           ],
           limits: [
             { label: "Orders / month", value: "20,000" },
-            { label: "Campaign sends / month", value: "40,000", starred: true },
-            { label: "Abandoned recovery / month", value: "15,000", starred: true },
+            { label: "Campaign sends / month", value: "40,000" },
+            { label: "Abandoned recovery / month", value: "15,000" },
           ],
         },
       ];
 
+      function openLink(type) {
+        const routes = {
+          demo: "https://example.com/book-demo",
+          onboarding: "https://example.com/start-onboarding",
+        };
+        window.open(routes[type], "_blank");
+      }
+
+      demoBtn?.addEventListener("click", () => openLink("demo"));
+      onboardBtn?.addEventListener("click", () => openLink("onboarding"));
+
       function formatInr(amount) {
-        return `₹${amount}`;
+        const value = Number(amount || 0);
+        if (!Number.isFinite(value)) return "₹0";
+        return `₹${Math.round(value).toLocaleString("en-IN")}`;
       }
 
       function durationLabel(months) {
@@ -1390,86 +1404,284 @@ button:hover {
       }
 
       function computeDiscountedTotal(monthly, months, discountPercent) {
-        const original = monthly * months;
-        return Math.round((original * (100 - discountPercent)) / 100);
+        const original = Number(monthly || 0) * Number(months || 0);
+        return Math.round((original * (100 - Number(discountPercent || 0))) / 100);
       }
 
-      function renderOnboardPlans() {
-        if (!onboardPlanGrid) {
-          return;
+      function toTitleCase(value) {
+        const raw = `${value || ""}`.trim().toLowerCase();
+        if (!raw) return "";
+        return raw.charAt(0).toUpperCase() + raw.slice(1);
+      }
+
+      function normalizeFeatureRows(card) {
+        const rows = Array.isArray(card?.features) ? card.features : [];
+        return rows
+          .map((row) => {
+            const label = `${row?.label || ""}`.trim();
+            if (!label) return null;
+            const included = Boolean(row?.enabled ?? row?.included);
+            return { label, included };
+          })
+          .filter(Boolean);
+      }
+
+      function normalizeLimitRows(dto, card) {
+        const source = card?.limits || {};
+        const orders =
+          source.ordersPerMonth ??
+          source.orders_per_month ??
+          dto?.ordersPerMonthLimit ??
+          0;
+        const campaigns =
+          source.campaignSendsPerMonth ??
+          source.campaign_sends_per_month ??
+          dto?.campaignSendsPerMonthLimit ??
+          0;
+        const abandoned =
+          source.abandonedRecoverySendsPerMonth ??
+          source.abandoned_cart_recovery_sends_per_month ??
+          dto?.abandonedRecoverySendsPerMonthLimit ??
+          0;
+
+        return [
+          { label: "Orders / month", value: `${Number(orders).toLocaleString("en-IN")}` },
+          {
+            label: "Campaign sends / month",
+            value: `${Number(campaigns).toLocaleString("en-IN")}`,
+          },
+          {
+            label: "Abandoned recovery / month",
+            value: `${Number(abandoned).toLocaleString("en-IN")}`,
+          },
+        ];
+      }
+
+      function parseDurationDiscountMap(dto) {
+        const out = {};
+        const csv = `${dto?.durationDiscountCsv || ""}`.trim();
+        if (csv) {
+          csv.split(",").forEach((entry) => {
+            const [rawMonth, rawDiscount] = entry.split(":");
+            const month = Number(`${rawMonth || ""}`.trim());
+            const discount = Number(`${rawDiscount || ""}`.trim());
+            if (Number.isFinite(month) && month > 0 && Number.isFinite(discount)) {
+              out[month] = discount;
+            }
+          });
+        }
+        return out;
+      }
+
+      function normalizePlan(dto) {
+        const tier = `${dto?.planTier || ""}`.trim().toUpperCase();
+        const title = toTitleCase(tier);
+        let card = null;
+        try {
+          card = dto?.planCardJson ? JSON.parse(dto.planCardJson) : null;
+        } catch (_) {
+          card = null;
         }
 
-        onboardPlanGrid.innerHTML = onboardPlanSpecs
-          .map((plan) => {
-            const durationRows = planDurationSpecs
-              .map((duration) => {
-                const discountedTotal = computeDiscountedTotal(
-                  plan.monthlyPriceInr,
-                  duration.months,
-                  duration.discountPercent
-                );
-                const isMain = duration.months === 12;
-                return `
-                  <div class="plan-duration${isMain ? " main" : ""}">
-                    <div class="plan-duration-left">${durationLabel(duration.months)} • ${formatInr(discountedTotal)}</div>
-                    <div class="plan-duration-right">
-                      ${isMain ? '<span class="duration-pill best">BEST VALUE</span>' : ""}
-                      ${
-                        duration.discountPercent > 0
-                          ? `<span class="duration-pill off">${duration.discountPercent}% OFF</span>`
-                          : ""
-                      }
-                    </div>
-                  </div>
-                `;
-              })
-              .join("");
+        const monthlyPriceInr =
+          Number(dto?.monthlyPriceRupees) ||
+          Number(dto?.monthlyPricePaise || 0) / 100 ||
+          0;
+        const durationDiscountByMonths = parseDurationDiscountMap(dto);
 
-            const limits = plan.limits
+        return {
+          tier,
+          title: card?.title ? `${card.title}`.replace(/\s*Plan$/i, "") : title,
+          subtitle:
+            card?.subtitle ||
+            (title === "Bronze"
+              ? "Operations Starter"
+              : title === "Silver"
+                ? "Growth + Engagement"
+                : title === "Gold"
+                  ? "Brand + Marketing"
+                  : "Governance + Moderation"),
+          monthlyPriceInr,
+          badge: card?.tag || (title === "Silver" ? "Popular" : title === "Gold" ? "Best Value" : title === "Platinum" ? "Advanced" : "Basic"),
+          features: normalizeFeatureRows(card),
+          limits: normalizeLimitRows(dto, card),
+          durationDiscountByMonths,
+        };
+      }
+
+      function isValidMonthlyPrice(value) {
+        const amount = Number(value);
+        return Number.isFinite(amount) && amount > 0;
+      }
+
+      function getPlanSortRank(plan) {
+        const tierKey = `${plan?.tier || ""}`.trim().toUpperCase();
+        if (PLAN_TIER_ORDER[tierKey]) {
+          return PLAN_TIER_ORDER[tierKey];
+        }
+        const titleKey = `${plan?.title || ""}`.trim().toUpperCase();
+        return PLAN_TIER_ORDER[titleKey] || Number.MAX_SAFE_INTEGER;
+      }
+
+      function normalizeBaseUrl(raw) {
+        const value = `${raw || ""}`.trim();
+        if (!value) return "";
+        return value.replace(/\/+$/, "");
+      }
+
+      async function loadApiBaseUrlFromAppConfig() {
+        const configUrl =
+          `${window.MINIS_APP_CONFIG_URL || ""}`.trim() || DEFAULT_APP_CONFIG_URL;
+        try {
+          const response = await fetch(configUrl, {
+            method: "GET",
+            headers: { Accept: "application/json" },
+            credentials: "omit",
+          });
+          if (!response.ok) return "";
+          const payload = await response.json();
+          return normalizeBaseUrl(payload?.apiBaseUrl);
+        } catch (_) {
+          return "";
+        }
+      }
+
+      async function resolveApiBaseUrl() {
+        if (cachedApiBaseUrlPromise) {
+          return cachedApiBaseUrlPromise;
+        }
+        cachedApiBaseUrlPromise = (async () => {
+          const fromWindow = normalizeBaseUrl(window.MINIS_API_BASE_URL);
+          if (fromWindow) return fromWindow;
+
+          const fromAppConfig = await loadApiBaseUrlFromAppConfig();
+          if (fromAppConfig) return fromAppConfig;
+
+          if (
+            window.location.protocol === "http:" ||
+            window.location.protocol === "https:"
+          ) {
+            return normalizeBaseUrl(window.location.origin);
+          }
+          return DEFAULT_API_BASE_URL;
+        })();
+        return cachedApiBaseUrlPromise;
+      }
+
+      function durationDiscountFor(plan, months) {
+        const fromPlan = plan?.durationDiscountByMonths?.[months];
+        if (Number.isFinite(fromPlan)) return fromPlan;
+        const fallback = PLAN_DURATION_SPECS.find((item) => item.months === months);
+        return fallback ? fallback.discountPercent : 0;
+      }
+
+      function renderOnboardPlans(plans) {
+        if (!onboardPlanGrid) return;
+        onboardPlanGrid.innerHTML = plans
+          .map((plan) => {
+            const durationRows = PLAN_DURATION_SPECS.map((duration) => {
+              const discountPercent = durationDiscountFor(plan, duration.months);
+              const discountedTotal = computeDiscountedTotal(
+                plan.monthlyPriceInr,
+                duration.months,
+                discountPercent
+              );
+              const isMain = duration.months === 12;
+              return `
+          <div class="plan-duration${isMain ? " main" : ""}">
+            <div class="plan-duration-left">${durationLabel(duration.months)} • ${formatInr(discountedTotal)}</div>
+            <div class="plan-duration-right">
+              ${isMain ? '<span class="duration-pill best">BEST VALUE</span>' : ""}
+              ${discountPercent > 0 ? `<span class="duration-pill off">${discountPercent}% OFF</span>` : ""}
+            </div>
+          </div>
+        `;
+            }).join("");
+
+            const limits = (plan.limits || [])
               .map(
                 (limit) =>
-                  `<li class="plan-limit"><span class="plan-limit-label">${limit.label}${limit.starred ? "*" : ""}</span><span class="plan-limit-value">${limit.value}${limit.starred ? "*" : ""}</span></li>`
+                  `<li class="plan-limit"><span class="plan-limit-label">${limit.label}</span><span class="plan-limit-value">${limit.value}</span></li>`
               )
               .join("");
 
-            const features = plan.features
+            const features = (plan.features || [])
               .map((feature) => {
                 const typeClass = feature.included ? "in" : "out";
                 const mark = feature.included ? "✓" : "✕";
                 return `
-                  <li class="plan-feature ${typeClass}">
-                    <span class="plan-feature-mark">${mark}</span>
-                    <span>${feature.label}${feature.starred ? "*" : ""}</span>
-                  </li>
-                `;
+            <li class="plan-feature ${typeClass}">
+              <span class="plan-feature-mark">${mark}</span>
+              <span>${feature.label}</span>
+            </li>
+          `;
               })
               .join("");
 
+            const tierClass = `${plan.title || ""}`.trim().toLowerCase();
             return `
-              <article class="plan-card ${plan.title.toLowerCase()}">
-                <div class="plan-top">
-                  <div>
-                    <h3 class="plan-title">${plan.title} Plan</h3>
-                    <p class="plan-subtitle">${plan.subtitle}</p>
-                    <p class="plan-price">${formatInr(plan.monthlyPriceInr)} / month base</p>
-                  </div>
-                  <span class="plan-badge">${plan.badge}</span>
-                </div>
-                <p class="plan-policy-banner">No orders in a month? No subscription fee for that month, and your plan auto-extends by 1 month.</p>
-                <h4 class="plan-label">Features</h4>
-                <ul class="plan-features">${features}</ul>
-                <h4 class="plan-label">Plan Limits</h4>
-                <ul class="plan-limits">${limits}</ul>
-                <h4 class="plan-label">Duration Pricing</h4>
-                <div class="plan-duration-list">${durationRows}</div>
-                <p class="plan-footnote"><span class="tc-tag">* T&amp;C</span><span class="tc-highlight">Features, limits and pricing may change later.</span></p>
-              </article>
-            `;
+        <article class="plan-card ${tierClass}">
+          <div class="plan-top">
+            <div>
+              <h3 class="plan-title">${plan.title} Plan</h3>
+              <p class="plan-subtitle">${plan.subtitle}</p>
+              <p class="plan-price">${formatInr(plan.monthlyPriceInr)} / month base</p>
+            </div>
+            <span class="plan-badge">${plan.badge}</span>
+          </div>
+          <p class="plan-policy-banner">No orders in a month? No subscription fee for that month, and your plan auto-extends by 1 month.</p>
+          <h4 class="plan-label">Features</h4>
+          <ul class="plan-features">${features}</ul>
+          <h4 class="plan-label">Plan Limits</h4>
+          <ul class="plan-limits">${limits}</ul>
+          <h4 class="plan-label">Duration Pricing</h4>
+          <div class="plan-duration-list">${durationRows}</div>
+          <p class="plan-footnote"><span class="tc-tag">* T&amp;C</span><span class="tc-highlight">Features, limits and pricing may change later.</span></p>
+        </article>
+      `;
           })
           .join("");
       }
 
-      renderOnboardPlans();
+      async function fetchDynamicPlans() {
+        const baseUrl = await resolveApiBaseUrl();
+        const response = await fetch(
+          `${baseUrl}/api/v1/public/billing/plans?includeInactive=false`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+            },
+            credentials: "omit",
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`Plan API failed: ${response.status}`);
+        }
+        const data = await response.json();
+        if (!Array.isArray(data) || data.length === 0) {
+          throw new Error("Plan API returned no plans");
+        }
+        return data
+          .map(normalizePlan)
+          .filter((plan) => isValidMonthlyPrice(plan?.monthlyPriceInr))
+          .sort((a, b) => getPlanSortRank(a) - getPlanSortRank(b));
+      }
+
+      async function initOnboardPlans() {
+        try {
+          const dynamicPlans = await fetchDynamicPlans();
+          if (!dynamicPlans.length) {
+            throw new Error("No valid active plans with monthly price");
+          }
+          renderOnboardPlans(dynamicPlans);
+        } catch (error) {
+          console.warn("Using fallback onboarding plans:", error);
+          renderOnboardPlans(PLAN_FALLBACK);
+        }
+      }
+
+      initOnboardPlans();
     </script>
   </body>
 </html>
